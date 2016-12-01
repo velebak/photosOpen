@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+		PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+    <f:loadBundle var="photoLabels" basename="photos.PhotoLabels"/>
+
+	<h:form id="photoUploadFormId" prependId="false" enctype="multipart/form-data">
+
+        <p:panel id="uploadPanelId" styleClass="photoContainer"
+                 rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}">
+
+            <h2>#{photoLabels.photoUploadTitle}</h2>
+
+            <p:outputLabel id="uploadInsLabelId"
+                           value="#{photoLabels.fileUploadInstructions}"/>
+
+            <p:growl id="messages" showDetail="true" />
+
+            <p:fileUpload id="fileUploadId" styleClass="photoUpload"
+                          label="#{photoLabels.select}"
+                          cancelLabel="#{photoLabels.cancel}"
+                          fileUploadListener="#{photoListBean.handleFileUpload}"
+                          mode="advanced"
+                          update="messages,uploadedPhotoPpnId"
+                          auto="true"
+                          dragDropSupport="true"
+                          multiple="false"
+                          sizeLimit="30000000"
+                          allowTypes="/(\.|\/)(jpe?g)$/"
+                          fileLimit="25" fileLimitMessage="#{photoLabels.errorTooManyFiles}"
+                          invalidFileMessage="#{photoLabels.errorInvalidFileType}"
+                          invalidSizeMessage="#{photoLabels.errorInvalidFileSize}"/>
+
+            <p:commandButton id="doneBtn" value="#{photoLabels.done}" ajax="false" immediate="true"
+                             action="#{photoListBean.completedUpload()}"
+                             styleClass="buttons" />
+        </p:panel>
+
+        <p:panel id="uploadedPhotoPpnId" styleClass="photoContainer">
+            <p:ring id="newPhotosRingId" value="#{photoListBean.newlyUpdatedPhotoList}" var="photo"
+                    rendered="#{not empty photoListBean.newlyUpdatedPhotoList}"
+                    styleClass="photoUpload" easing="easeInOutCirc">
+
+                <p:column>
+                    <p:graphicImage id="photoRingMemberId" width="50" height="50" styleClass="uploadedPhotoImage"
+                                    value="#{photoListBean.photoStreamedContent}">
+                        <f:param id="photoParamId" name="photoId" value="#{photo.id}" />
+                    </p:graphicImage>
+                </p:column>
+            </p:ring>
+
+        </p:panel>
+	</h:form>
+</ui:define>
+</ui:composition>
+</html>

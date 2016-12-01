@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<f:loadBundle var="generalLabels" basename="main.GeneralLabels"/>
+	<div id="footer">
+
+        <h:form id="footerFormId" prependId="false">
+            <p:panel id="ftrPnlId" style="width: 100%" styleClass="hiddenPanel">
+                #{generalLabels.copyright} &nbsp;| &nbsp;#{generalLabels.slogan} &nbsp;|&nbsp;
+                <p:commandLink id="contactLnkId" type="button" value="#{generalLabels.contact}"
+                               immediate="true" onclick="PF('contactDlg').show();"/>
+            </p:panel>
+
+            <p:dialog id="contactDlgId" for="menuDock" widgetVar="contactDlg" closable="true" closeOnEscape="true"
+                      header="#{generalLabels.contact}"
+                      style="height: 300px;"
+                      showEffect="fade" hideEffect="fade">
+
+                <p>
+                    <p:outputLabel id="contactDlgMsgLblId" value="#{generalLabels.contactMessage}"/>
+                </p>
+                <p>
+                    <p:outputLabel id="contactDlgEmailLblId" value="#{generalLabels.emailAddress}"/>
+                </p>
+
+            </p:dialog>
+        </h:form>
+    </div>
+</ui:composition>
+</html>

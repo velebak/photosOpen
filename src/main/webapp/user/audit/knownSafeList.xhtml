@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="content">
+
+	    <f:loadBundle var="auditLabels" basename="users.UserEvent"/>
+
+        <h:form id="knownSafeListFormId" prependId="false">
+
+            <p:remoteCommand id="updateBtnsId" name="updateCmdBtns" update="actionButtonsPanel"/>
+
+            <p:panel id="mainPanel" rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}">
+
+                <p:panelGrid id="contentInnerHeaderPanel" columns="2">
+
+                    <h2>#{auditLabels.knownSafeList}</h2>
+
+                    <p:panelGrid id="actionButtonsPanel" columns="4">
+
+                        <p:commandButton id="addBtnId" value="#{auditLabels.add}"
+                                         type="button" onclick="PF('addAddressDialog').show();"
+                                         update="@form"
+                                         styleClass="buttons"/>
+
+                        <p:commandButton id="removeBtnId" value="#{auditLabels.removeSelected}"
+                                         type="button" onclick="PF('removeBlockedDlg').show();"
+                                         disabled="#{empty auditLogListBean.selectedKnownSafe}"
+                                         update="@form"
+                                         styleClass="buttons"/>
+
+                        <p:commandButton id="backBtnId" value="#{auditLabels.back}"
+                                         action="#{auditLogListBean.reloadList}" ajax="false"
+                                         immediate="true"
+                                         styleClass="buttons"/>
+
+                        <p:commandButton id="reloadBtnId" value="#{auditLabels.reload}"
+                                         action="#{auditLogListBean.reloadKnownSafeList}" ajax="false"
+                                         styleClass="buttons"/>
+                    </p:panelGrid>
+                </p:panelGrid>
+
+                <p:dataTable id="knownSafeTable" var="knownSafe" value="#{knownSafeList}"
+                             selectionMode="single" selection="#{auditLogListBean.selectedKnownSafe}"
+                             sortBy="#{knownSafe.createdDate}" sortOrder="DESCENDING"
+                             resizableColumns="true"
+                             paginator="true" rows="15" paginatorPosition="bottom"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,15,25"
+                             emptyMessage="#{auditLabels.knownSafeEmpty}"
+                             lazy="true">
+
+                    <p:ajax event="rowSelect" oncomplete="updateCmdBtns();" />
+
+                    <p:column headerText="#{auditLabels.createdDate}" sortBy="#{knownSafe.createdDate}">
+                        <h:outputText value="#{knownSafe.createdDate}" />
+                    </p:column>
+
+                    <p:column headerText="#{auditLabels.remoteAddress}" sortBy="#{knownSafe.remoteAddress}"
+                              filterBy="#{knownSafe.remoteAddress}" filterMaxLength="20">
+                        <h:outputText value="#{knownSafe.remoteAddress}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+            <p:dialog id="addAddressDialogId" widgetVar="addAddressDialog"
+                      hideEffect="explode" showEffect="fade"
+                      header="#{auditLabels.newSafeAddress}">
+
+                <p:outputLabel id="addLbLId" value="#{auditLabels.newRemoteAddressToMarkSafe}" for="addInpTxtId"/>
+
+                <p:inputText id="addInpTxtId" value="#{auditLogListBean.newSafeRemoteAddress}"
+                             required="true" requiredMessage="#{auditLabels.newRemoteAddressRequired}"
+                             validatorMessage="#{auditLabels.newRemoteAddressInvalid}"
+                             maxlength="40">
+                    <f:validateRegex pattern="^[a-fA-F\d.:]+$"  />
+                </p:inputText>
+                <p:message id="addMsgId" for="addInpTxtId"/>
+
+                <p:commandButton id="newBlockBtnId" value="#{auditLabels.markSafe}"
+                                 action="#{auditLogListBean.saveUserEditedNewSafeAddress}"
+                                 ajax="false"
+                                 oncomplete="PF('addAddressDialog').hide();"
+                                 styleClass="buttons"/>
+
+                <p:commandButton id="cancelBtnId" value="#{auditLabels.cancel}"
+                                 immediate="true"
+                                 oncomplete="PF('addAddressDialog').hide();"
+                                 styleClass="buttons"/>
+            </p:dialog>
+
+            <p:dialog id="removeDlgId" widgetVar="removeBlockedDlg"
+                      hideEffect="explode" showEffect="fade"
+                      header="#{auditLabels.confirmRemovalTitle}" >
+
+                <p>
+                    <p:outputLabel id="msgLblId" value="#{auditLabels.confirmRemoveSafe}"/>
+                </p>
+
+                <p:commandButton id="confirmRemoveBtnId" value="#{auditLabels.continueWithRemoval}"
+                                 immediate="true" ajax="false"
+                                 action="#{auditLogListBean.removeSelectedSafeAddress}"
+                                 onsuccess="PF('removeBlockedDlg').hide();"
+                                 styleClass="buttons"/>
+
+                <p:commandButton id="noBtnId" value="#{auditLabels.cancel}" immediate="true"
+                                 oncomplete="PF('removeBlockedDlg').hide();"
+                                 styleClass="buttons"/>
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

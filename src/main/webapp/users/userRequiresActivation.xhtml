@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+    <f:loadBundle var="userLabels" basename="users.UserLabels"/>
+
+    <h:form id="userLoginFormId" prependId="false">
+
+        <p:panel id="mainPanel">
+            <h2>#{userLabels.userLogin}</h2>
+
+            <h:messages id="loginMessagedId" errorClass="errorSummaryText" />
+
+            <p:panel id="needToActivatePnlId" styleClass="hiddenPanel">
+                <p:outputLabel id="needsActivationLblId" value="#{userLabels.needsActivation}"
+                               rendered="#{userRegistrationBean.now lt webUserSession.webUser.activationExpiration }"/>
+
+                <p:outputLabel id="expiredActivationLblId" value="#{userLabels.needsActivationCurrentExpired}"
+                               rendered="#{userRegistrationBean.now gt webUserSession.webUser.activationExpiration }"/>
+            </p:panel>
+
+            <p:panel id="newActivatePnlId" styleClass="hiddenPanel">
+
+                <p:outputLabel id="needActLblId" value="#{userLabels.newActivationQuestion} "/>
+
+                <p:commandButton id="newActBtnId" value="#{userLabels.sendActivationEmail}" immediate="true"
+                                 action="#{userRegistrationBean.newActivationCode}" styleClass="buttons"
+                                 onclick="blockForm.show();"
+                                 oncomplete="blockForm.hide();"/>
+
+                <p:blockUI block="@form" widgetVar="blockForm"/>
+            </p:panel>
+        </p:panel>
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+	<f:loadBundle var="userLabels" basename="users.UserLabels"/>
+    <f:loadBundle var="userType" basename="users.UserType"/>
+    <f:loadBundle var="userStatus" basename="users.UserStatus"/>
+	<p:messages id="profileMessagedId"/>
+
+    <h:form id="userActFormId" prependId="false">
+
+	    <p:panel id="labelValuePanel">
+		    <h2>#{userLabels.userProfile}</h2>
+
+		    <p:panelGrid id="mainGrid" columnClasses="labelColumn, valueColumn" styleClass="noLines">
+
+		        <p:row>
+			        <p:column><p:outputLabel id="userNameLabelId" value="#{userLabels.userName}" /></p:column>
+			        <p:column>
+                        <p:outputLabel id="userNameId" value="#{userListBean.currentWebUser.userName}"
+                                       rendered="#{not userListBean.newUserMode}"/>
+
+                        <p:inputText id="userNameInputId" value="#{userListBean.currentWebUser.userName}"
+                                     required="true" maxlength="32"
+                                     requiredMessage="#{userLabels.errorUserNameRequired}"
+                                     validator="#{userNameValidator.validate}"
+                                     rendered="#{userListBean.newUserMode}">
+                            <f:ajax onevent="blur" render="userNameMsgId"/>
+                        </p:inputText>
+                        <p:message id="userNameMsgId" for="userNameInputId"/>
+                    </p:column>
+		        </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="emailLabelId" value="#{userLabels.emailAddress}" for="primaryEmailAddressInputId" />
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="emailValueLblId" value="#{userListBean.currentWebUser.emailAddress}"
+                                       rendered="#{not userListBean.inEditMode}"/>
+
+                        <p:inputText id="primaryEmailAddressInputId"
+                                     value="#{userListBean.currentWebUser.emailAddress}"
+                                     label="#{userLabels.emailAddressTip}"
+                                     size="30"
+                                     required="true" maxlength="40"
+                                     rendered="#{userListBean.inEditMode}"
+                                     requiredMessage="#{userLabels.errorEmailRequired}"
+                                     validator="#{emailValidator.validate}" >
+                            <f:ajax onevent="blur" render="emailErrMsgId"/>
+                        </p:inputText>
+                        <p:message id="emailErrMsgId" for="primaryEmailAddressInputId"/>
+                    </p:column>
+                </p:row>
+
+		        <p:row>
+			        <p:column>
+				        <p:outputLabel id="firstNameLabelId" value="#{userLabels.firstName}" for="firstNameInputId"/>
+			        </p:column>
+
+			        <p:column>
+			            <p:outputLabel id="firstNameId" value="#{userListBean.currentWebUser.firstName}"
+                                       rendered="#{not userListBean.inEditMode}"/>
+
+				        <p:inputText id="firstNameInputId" value="#{userListBean.currentWebUser.firstName}"
+                                     required="true" maxlength="32"
+                                     rendered="#{userListBean.inEditMode}"
+				                     requiredMessage="#{userLabels.errorFirstNameRequired}"
+                                     validatorMessage="#{userLabels.errorFirstNameInvalid}">
+					        <f:validateRegex pattern="^[\p{L} .,'-]*$"  />
+					        <f:ajax onevent="blur" render="fistNameMsgId"/>
+				        </p:inputText>
+				        <p:message id="fistNameMsgId" for="firstNameInputId"/>
+					</p:column>
+		        </p:row>
+
+		        <p:row>
+			        <p:column>
+				        <p:outputLabel id="lastNameLabelId" value="#{userLabels.lastName}" for="lastNameInputId"/>
+				    </p:column>
+
+			        <p:column>
+				        <p:outputLabel id="lastNameId" value="#{userListBean.currentWebUser.lastName}"
+				                       rendered="#{not userListBean.inEditMode}" />
+
+				        <p:inputText id="lastNameInputId" value="#{userListBean.currentWebUser.lastName}" required="true" maxlength="32"
+                                     rendered="#{userListBean.inEditMode}"
+				                     requiredMessage="#{userLabels.errorLastNameRequired}"
+                                     validatorMessage="#{userLabels.errorLastNameInvalid}">
+					        <f:validateRegex pattern="^[\p{L} .,'-]*$"  />
+					        <f:ajax onevent="blur" render="lastNameMsgId"/>
+				        </p:inputText>
+				        <p:message id="lastNameMsgId" for="lastNameInputId"/>
+			        </p:column>
+		        </p:row>
+
+		        <p:row>
+			        <p:column>
+				        <p:outputLabel id="phoneLabelId" value="#{userLabels.phone}" for="phoneInputId"/>
+			        </p:column>
+
+			        <p:column>
+			            <p:outputLabel id="phoneValueLabelId" value="#{userListBean.currentWebUser.phone}"
+			                           rendered="#{not userListBean.inEditMode}"/>
+				        <p:inputMask id="phoneInputId" value="#{userListBean.currentWebUser.phone}"
+				                     mask="(999) 999-9999? x99999" rendered="#{userListBean.inEditMode}">
+				        </p:inputMask>
+			        </p:column>
+		        </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="userTypeLblId" value="#{userLabels.userType}"/>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="userTypeValueLabelId" value="#{userType[userListBean.currentWebUser.userType.label]}"
+                                       rendered="#{not (userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN')}"/>
+                        <p:selectOneMenu id="userTypeSelectOneId" value="#{userListBean.currentWebUser.userType}"
+                                         rendered="#{userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN'}">
+                            <f:selectItems value="#{commonItems.userTypes}" var="userTypeItem"
+                                           itemValue="#{userTypeItem}" itemLabel="#{userType[userTypeItem.label]}" />
+                        </p:selectOneMenu >
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="userStatusLblId" value="#{userLabels.userStatus}"/>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="userStatusValueLabelId" value="#{userStatus[userListBean.currentWebUser.userStatus.label]}"
+                                       rendered="#{not (userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN')}"/>
+                        <p:selectOneMenu id="userStatusSelectOneId" value="#{userListBean.currentWebUser.userStatus}"
+                                         rendered="#{userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN'}"
+                                         effect="fade" >
+                            <f:selectItems value="#{commonItems.userStatuses}" var="userStatusItem"
+                                           itemValue="#{userStatusItem}" itemLabel="#{userStatus[userStatusItem.label]}" />
+                        </p:selectOneMenu >
+                    </p:column>
+                </p:row>
+
+                <p:row rendered="#{not userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN'}">
+                    <p:column>
+                        <p:outputLabel id="createdLblId" value="#{userLabels.accountCreated}"/>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="createdLabelId" value="#{userListBean.currentWebUser.createdDate}" >
+                            <f:convertDateTime dateStyle="long"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:row>
+
+                <p:row rendered="#{not userListBean.inEditMode and webUserSession.webUser.userType eq 'ADMIN'}">
+                    <p:column>
+                        <p:outputLabel id="lastLoginLblId" value="#{userLabels.lastSeen}"/>
+                    </p:column>
+                    <p:column>
+                        <p:outputLabel id="lastSeenLabelId" value="#{userListBean.currentWebUser.lastLoginDate}" >
+                            <f:convertDateTime dateStyle="long"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:row>
+
+			    <p:row rendered="#{userListBean.hasAtLeastOneAddress}">
+				    <p:column colspan="2">
+					    <p:dataGrid id="addressDataGridId" columns="1" value="#{userListBean.currentWebUser.addressList}"
+					            var="userAddress" styleClass="addressPanel">
+
+						    <p:panelGrid id="addressDisplayGridPanelId" styleClass="addressPanel">
+							    <p:row>
+								    <p:column>
+
+									    <p:outputLabel id="addressLabelId" value="#{userAddress.addressLabel} #{userLabels.address}"
+									                   rendered="#{not userAddress.toBeDeleted}" styleClass="addressLabel"/>
+									    <p:outputLabel id="addressLabelToBeDeletedId" value="#{userAddress.addressLabel} #{userLabels.address}"
+											            rendered="#{userAddress.toBeDeleted}" styleClass="deletedLabel"/>
+
+										<p:commandLink id="addressEditBtnId" value="#{userLabels.edit}"
+									                   action="#{userListBean.editAddress(userAddress)}"
+									                   ajax="false"
+									                   styleClass="links" rendered="#{userListBean.inEditMode and not userAddress.toBeDeleted}"/>
+										<p:commandLink id="addressRemoveBtnId" value="#{userLabels.remove}"
+									                   action="#{userListBean.removeAddress(userAddress)}" update="addressDataGridId"
+									                   styleClass="links" rendered="#{userListBean.inEditMode and not userAddress.toBeDeleted}"/>
+
+									    <p:commandLink id="addressUndoRemoveBtnId" value="#{userLabels.undoRemove}"
+									                   action="#{userListBean.undoRemoveAddress(userAddress)}" update="addressDataGridId"
+									                   styleClass="links" rendered="#{userListBean.inEditMode and userAddress.toBeDeleted}"/>
+								    </p:column>
+							    </p:row>
+
+							    <p:row>
+								    <p:column colspan="3">
+									    <p:outputLabel id="addressSingleLineId" value="#{userListBean.formatAddress(userAddress)}"
+									                   rendered="#{not userAddress.toBeDeleted}" />
+									    <p:outputLabel id="addressSingleLineToBeDeletedId" value="#{userListBean.formatAddress(userAddress)}"
+									                   rendered="#{userAddress.toBeDeleted}" styleClass="deletedLabel"/>
+								    </p:column>
+							    </p:row>
+						    </p:panelGrid>
+					    </p:dataGrid>
+				    </p:column>
+			    </p:row>
+			    <p:row rendered="#{userListBean.inEditMode and userListBean.canAddAddress}">
+				    <p:column colspan="2">
+
+					    <p:commandLink id="addAddressLinkId" value="#{userLabels.addAddress}"
+					                   action="#{userListBean.prepareToAddAddress}"
+                                       ajax="true" process="@this"
+					                   styleClass="links"/>
+				    </p:column>
+			    </p:row>
+
+	        </p:panelGrid>
+
+            <p:commandButton id="editBtnId" value="#{userLabels.edit}"
+                             action="#{userListBean.editUser}" update="@form"
+                             styleClass="buttons" rendered="#{not userListBean.inEditMode}"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+            <p:commandButton id="doneBtnId" value="#{userLabels.done}"
+                             action="/user/profile/userList.jsf" ajax="false"
+                             styleClass="buttons"
+                             rendered="#{not userListBean.inEditMode and userListBean.userViewMode eq 'ADMIN'}"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+            <p:commandButton id="submitBtnId" value="#{userLabels.submit}"
+                             action="#{userListBean.saveUser}" process="@form" update="@form"
+                             styleClass="buttons" rendered="#{userListBean.inEditMode}"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+            <p:commandButton id="cancelBtnId" value="#{userLabels.cancel}"
+                             action="#{userListBean.cancelEdit}" immediate="true" update="@form"
+                             styleClass="buttons" rendered="#{userListBean.inEditMode}"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+
+            <p:commandButton id="deleteBtnId" value="#{userLabels.deleteUser}"
+                             action="#{userListBean.deleteUser}" ajax="false" immediate="true" update="@form"
+                             styleClass="buttons"
+                             rendered="#{not userListBean.newUserMode and not userListBean.inEditMode and userListBean.userViewMode eq 'ADMIN'}"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+
+            <p:blockUI block="@form" widgetVar="blockForm"/>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:define>
+</ui:composition>
+</html>

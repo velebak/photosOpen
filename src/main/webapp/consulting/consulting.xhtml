@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    <f:loadBundle var="generalLabels" basename="main.GeneralLabels"/>
+
+	<div id="consulting">
+		#{generalLabels.consulting}
+	</div>
+
+	<div id="css3Id" class="skillToDisplay">CSS3</div>
+	<div id="jeeId" class="skillToDisplay">JEE6</div>
+	<div id="jsfId" class="skillToDisplay">JSF2</div>
+	<div id="pfId" class="skillToDisplay longer120">PrimeFaces</div>
+
+	<h:outputScript target="head">
+		// Add the $() function
+		$ = jQuery;
+		// Now you can use it
+		$(document).ready(function() {
+
+		});
+	</h:outputScript>
+
+</ui:define>
+</ui:composition>
+</html>

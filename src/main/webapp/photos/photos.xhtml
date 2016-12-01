@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+    <f:loadBundle var="photoLabels" basename="photos.PhotoLabels"/>
+
+    <h:form prependId="false">
+
+        <p:remoteCommand id="updateBtnsId" name="updateCmdBtns" update="actionButtonsPanel"/>
+
+        <p:panel id="contentInnerHeaderPanel" styleClass="ui-grid ui-grid-responsive">
+
+            <div class="ui-grid-row">
+
+                <div class="ui-grid-col-5">
+                    <h2>#{photoLabels.photoListTitle}</h2>
+                </div>
+
+                <div class="ui-grid-col-7">
+
+                    <p:panel id="actionButtonsPanel" styleClass="ui-grid ui-grid-responsive">
+
+                        <div class="ui-grid-row">
+
+                            <p:commandButton id="newPhotosBtnId" value="#{photoLabels.addPhotos}"
+                                             action="#{photoListBean.initializePhotoUpload}" ajax="false"
+                                             styleClass="ui-grid-col-4 buttons"
+                                             rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}"/>
+
+                            <p:commandButton id="removePhotosBtnId" value="#{photoLabels.removePhotos}"
+                                             type="button" onclick="PF('removeDlg').show();"
+                                             styleClass="ui-grid-col-4 buttons"
+                                             disabled="#{empty photoListBean.selectedPhotoList}"
+                                             rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}"/>
+
+                            <p:commandButton id="slideShowBtnId" value="#{photoLabels.slideShow}"
+                                             action="#{photoListBean.startSlideShow}"
+                                             disabled="#{empty photoListBean.selectedPhotoList}"
+                                             styleClass="ui-grid-col-4 buttons" style="display: none;"/>
+                        </div>
+                    </p:panel>
+                </div>
+            </div>
+        </p:panel>
+
+        <p:dataTable id="photoDataTableId" var="photo" widgetVar="photoListTable" value="#{photoList}"
+                     selection="#{photoListBean.selectedPhotoList}" rowKey="#{photo.id}" selectionMode="multiple"
+                     sortBy="#{photo.photoName}" sortOrder="ascending"
+                     paginator="true" rows="10" paginatorPosition="bottom"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     rowsPerPageTemplate="10,25,100"
+                     emptyMessage="#{photoLabels.noPhotos}"
+                     lazy="true">
+
+            <p:ajax event="rowSelect" oncomplete="updateCmdBtns();" />
+
+            <p:column style="width:16px">
+                <p:rowToggler />
+            </p:column>
+
+            <p:column headerText="#{photoLabels.name}" styleClass="smallColumnWidth" sortBy="#{photo.photoName}"
+                      filterBy="#{photo.photoName}" filterMaxLength="30">
+                <h:outputText value="#{photo.photoName}" />
+            </p:column>
+
+            <p:column headerText="#{photoLabels.size}" styleClass="smallColumnWidth" sortBy="#{photo.size}" filterBy="#{photo.size}">
+                <f:facet name="filter">
+                    <p:selectCheckboxMenu id="fileSizeRangeFilterId"
+                                          value="#{photoListFilter.selectedFileSizeRangeList}"
+                                          label="#{photoLabels.fileSizeRange}"
+                                          onchange="PF('photoListTable').filter();"
+                                          panelStyle="width:225px" scrollHeight="200">
+                        <f:selectItems value="#{photoListFilter.fileSizeRangeMap.entrySet()}"
+                                       var="range" itemLabel="#{range.value}" itemValue="#{range.key}" />
+                        <p:ajax event="toggleSelect" oncomplete="PF('photoListTable').filter();"/>
+                    </p:selectCheckboxMenu>
+                </f:facet>
+
+                <h:outputText id="itemFileSizeId" value="#{photo.size}" converter="com.photos.FileSizeConverter" />
+            </p:column>
+
+            <p:column headerText="#{photoLabels.taken}" styleClass="smallColumnWidth" sortBy="#{photo.taken}"
+                      filterBy="#{photo.taken}">
+                <f:facet name="filter">
+                    <p:selectCheckboxMenu id="yearTakenFilterId"
+                                          value="#{photoListFilter.selectedYearList}"
+                                          label="#{photoLabels.years}"
+                                          onchange="PF('photoListTable').filter();"
+                                          panelStyle="width:150px">
+                        <f:selectItems value="#{photoListFilter.fullYearList}"/>
+                        <p:ajax event="toggleSelect" oncomplete="PF('photoListTable').filter();"/>
+                    </p:selectCheckboxMenu>
+                </f:facet>
+
+                <h:outputText id="takenId" value="#{photo.taken}" >
+                    <f:convertDateTime dateStyle="short" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="#{photoLabels.uploaded}" styleClass="mediumColumnWidth" sortBy="#{photo.uploaded}"
+                      filterBy="#{photo.uploaded}" filterMaxLength="10">
+                <h:outputText id="uploadedId" value="#{photo.uploaded}" >
+                    <f:convertDateTime dateStyle="short" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="#{photoLabels.userName}" styleClass="smallColumnWidth" sortBy="#{photo.userName}"
+                      filterBy="#{photo.userName}">
+                <f:facet name="filter">
+                    <p:selectCheckboxMenu id="userNameFilterId"
+                                          value="#{photoListFilter.selectedUserNameList}"
+                                          label="#{photoLabels.userNames}"
+                                          onchange="PF('photoListTable').filter();"
+                                          panelStyle="width:150px">
+                        <f:selectItems value="#{photoListFilter.fullUserNameList}"/>
+                        <p:ajax event="toggleSelect" oncomplete="PF('photoListTable').filter();"/>
+                    </p:selectCheckboxMenu>
+                </f:facet>
+
+                <h:outputText value="#{photo.userName}" />
+            </p:column>
+
+            <p:column headerText="#{photoLabels.image}" styleClass="imageColumn">
+
+				<a href="/tfservices/photos/large/#{photo.largePhotoId}" target="_blank">
+                    <p:graphicImage width="50" height="50" style="margin: 1px; padding: 0;"
+                                    value="#{photoListBean.photoStreamedContent}" >
+                        <f:param id="photoParamId" name="photoId" value="#{photo.id}" />
+                    </p:graphicImage>
+				</a>
+            </p:column>
+
+            <p:rowExpansion id="rowExpid">
+                <p:panelGrid  columns="4" style="width:90%" styleClass="noLines">
+                    <f:facet name="header">
+                        <h:outputText value="#{photoLabels.details}" />
+                    </f:facet>
+
+                    <h:outputText value="#{photoLabels.originalFileName}#{photoLabels.colon}" styleClass="detailLabel" rendered="#{not empty photo.originalFileName}" />
+                    <h:outputText value="#{photo.originalFileName}" rendered="#{not empty photo.originalFileName}"/>
+
+                    <h:outputText value="#{photoLabels.description}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.description}"/>
+                    <h:outputText value="#{photo.description}" rendered="#{not empty photo.description}"/>
+
+                    <h:outputText value="#{photoLabels.height}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.height}"/>
+                    <h:outputText value="#{photo.height}" rendered="#{not empty photo.height}"/>
+
+                    <h:outputText value="#{photoLabels.width}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.width}"/>
+                    <h:outputText value="#{photo.width}" rendered="#{not empty photo.width}"/>
+
+                    <h:outputText value="#{photoLabels.exposureTime}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.exposureTime}"/>
+                    <h:outputText value="#{photo.exposureTime}" rendered="#{not empty photo.exposureTime}"/>
+
+                    <h:outputText value="#{photoLabels.aperture}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.aperture}"/>
+                    <h:outputText value="#{photo.aperture}" rendered="#{not empty photo.aperture}"/>
+
+                    <h:outputText value="#{photoLabels.isoSpeed}#{photoLabels.colon}" styleClass="detailLabel"  rendered="#{not empty photo.isoSpeed}"/>
+                    <h:outputText value="#{photo.isoSpeed}" rendered="#{not empty photo.isoSpeed}"/>
+
+                    <h:outputText value="#{photoLabels.whiteBalance}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.whiteBalance}"/>
+                    <h:outputText value="#{photo.whiteBalance}" rendered="#{not empty photo.whiteBalance}"/>
+
+                    <h:outputText value="#{photoLabels.focalLength}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.focalLength}"/>
+                    <h:outputText value="#{photo.focalLength}" rendered="#{not empty photo.focalLength}"/>
+
+                    <h:outputText value="#{photoLabels.lensModel}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.lensModel}"/>
+                    <h:outputText value="#{photo.lensModel}" rendered="#{not empty photo.lensModel}"/>
+
+                    <h:outputText value="#{photoLabels.cameraMake}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.cameraMake}"/>
+                    <h:outputText value="#{photo.cameraMake}" rendered="#{not empty photo.cameraMake}"/>
+
+                    <h:outputText value="#{photoLabels.cameraModel}#{photoLabels.colon}"  styleClass="detailLabel" rendered="#{not empty photo.cameraModel}"/>
+                    <h:outputText value="#{photo.cameraModel}" rendered="#{not empty photo.cameraModel}"/>
+
+                </p:panelGrid>
+            </p:rowExpansion>
+        </p:dataTable>
+
+        <p:dialog id="removeDlgId" widgetVar="removeDlg"
+                         hideEffect="explode" showEffect="fade"
+                         header="#{photoLabels.confirmRemovalTitle}" >
+
+            <p>
+                <p:outputLabel id="msgLblId" value="#{photoLabels.confirmRemove}"/>
+            </p>
+
+            <p:commandButton id="yesBtnId" value="#{photoLabels.continueWithRemoval}"
+                             action="#{photoListBean.removeSelectedPhotos}" update="@form"
+                             oncomplete="PF('removeDlg').hide();"
+                             styleClass="buttons"/>
+
+            <p:commandButton id="noBtnId" value="#{photoLabels.cancel}" immediate="true"
+                             oncomplete="PF('removeDlg').hide();"
+                             styleClass="buttons"/>
+        </p:dialog>
+
+
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>

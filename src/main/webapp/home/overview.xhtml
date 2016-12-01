@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+	<f:loadBundle var="generalLabels" basename="main.GeneralLabels"/>
+
+	<h2>#{generalLabels.welcome}</h2>
+
+    <h:form prependId="false">
+        <p:panel styleClass="hiddenPanel">
+            <p:outputLabel id="slideInText" styleClass="subHeader"
+                           value="Full Stack Web Application Development"/>
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel">
+            Specializing in JSF, JEE Web Application technologies.
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel">
+            This site is a JSF and JEE 7 demo which includes the following tech: Java 8, JSF 2.2, PrimeFaces, OmniFaces, MongoDB,
+            Spring Services, Spring Boot, Spring Data MongoDB, Apache, Java Mail, Java Cryptology.
+            Development technologies include: JUnit, Maven, git, Bitbucket, Jira and IntelliJ.
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel" rendered="#{not webUserSession.loggedIn}">
+            Register to see more of the User Management demo here:
+            <a href="/photoApp/users/newUser.jsf"><p:graphicImage value="/resources/images/icons/User.png" height="30" width="30"/></a>
+            or if you have already registered and activated a user account you can login here:
+            <a href="/photoApp/users/userLogin.jsf">
+                <p:graphicImage value="/resources/images/icons/Key.png" height="30" width="30"/>
+            </a>
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel">
+            A full summary of Heather's skills, experience can be found here:
+            <a target="_blank" class="links" href="https://www.linkedin.com/pub/heather-stevens/37/26b/2b8"><p:graphicImage value="/resources/images/icons/linkedin.jpg" height="30" width="30"/></a>
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel">
+            <p:commandLink id="overViewContactLnkId" type="button" value="#{generalLabels.contactHeatherStevens}"
+                           immediate="true" onclick="PF('contactDlg').show();"/> for a full demo of administrative content and
+            overview of technologies.
+        </p:panel>
+
+        <p:panel styleClass="hiddenPanel">
+            ** In progress an Angular 2 demo utilizing primeng and Sprint Boot restful services. There are also plans to
+			create an OpenID Connect SSO project.
+        </p:panel>
+
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>

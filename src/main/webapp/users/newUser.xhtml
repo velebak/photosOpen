@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="content">
+
+    <f:loadBundle var="userLabels" basename="users.UserLabels"/>
+
+    <h:form id="userRegFormId" prependId="false"
+            onkeypress="if (event.keyCode == 13) {jQuery('#submitBtnId').click(); return false; }">
+
+        <p:panel id="labelValuePanel">
+
+            <p:focus context="labelValuePanel"/>
+
+            <h2>#{userLabels.userRegistration}</h2>
+
+            <p:panelGrid id="userRegPanelGridId" columns="2" columnClasses="labelColumn, valueColumn" styleClass="hiddenPanel">
+
+                <h:outputLabel id="userNameLabelId" value="#{userLabels.userName}"/>
+
+                <p:panel id="userNamePnlId" styleClass="hiddenPanel">
+                    <p:inputText id="userNameInputId" value="#{regUser.userName}" required="true" maxlength="32"
+                             requiredMessage="#{userLabels.errorUserNameRequired}"
+                            validator="#{userNameValidator.validate}">
+                        <p:ajax event="blur" process="@this" update="userNameMsgId"/>
+                    </p:inputText>
+                    <p:message id="userNameMsgId" for="userNameInputId"/>
+                </p:panel>
+
+                <h:outputLabel id="passwordLabelId" value="#{userLabels.password}"/>
+
+                <p:panel id="passwordPanelId" styleClass="hiddenPanel">
+                    <p:password id="passwordInputId" value="#{regUser.password}" feedback="true" required="true" maxlength="48"
+                                requiredMessage="#{userLabels.errorPasswordRequired}" title="#{userLabels.passwordHint}"
+                                validator="#{passwordValidator.validate}" >
+                        <p:ajax event="blur" process="@this" update="passwordMsgId"/>
+                    </p:password>
+                    <p:message id="passwordMsgId" for="passwordInputId"/>
+                </p:panel>
+
+                <h:outputLabel id="password2LabelId">#{userLabels.password2}</h:outputLabel>
+
+                <p:panel id="password2PanelId" styleClass="hiddenPanel">
+                    <p:password id="password2InputId" value="#{regUser.password2}" feedback="false" required="true" maxlength="48"
+                            requiredMessage="#{userLabels.errorPassword2Required}" validator="#{passwordValidator.validateMatch}" >
+                        <p:ajax event="blur" process="@this" update="password2MsgId"/>
+                    </p:password>
+                    <p:message id="password2MsgId" for="password2InputId"/>
+                </p:panel>
+
+                <h:outputLabel id="primaryEmailAddressLabelId" value="#{userLabels.emailAddress}"/>
+
+                <p:panel id="emailPnlId" styleClass="hiddenPanel">
+                    <p:inputText id="primaryEmailAddressInputId"
+                                 value="#{regUser.emailAddress}"
+                                 label="#{userLabels.emailAddressTip}"
+                                 required="true" maxlength="48"
+                            requiredMessage="#{userLabels.errorEmailRequired}"
+                            validator="#{emailValidator.validate}" >
+                        <p:ajax event="blur" process="@this" update="emailErrMsgId"/>
+                    </p:inputText>
+                    <p:message id="emailErrMsgId" for="primaryEmailAddressInputId"/>
+                </p:panel>
+            </p:panelGrid>
+
+            <p:commandButton id="submitBtnId" value="#{userLabels.register}"
+                             action="#{userRegistrationBean.registerUser}"
+                             process="@form" update="@form"
+                             styleClass="buttons"
+                             onclick="blockForm.show();"
+                             oncomplete="blockForm.hide();"/>
+
+            <p:blockUI id="blockId" block="@form" widgetVar="blockForm" />
+
+        </p:panel>
+    </h:form>
+
+</ui:define>
+</ui:composition>
+</html>

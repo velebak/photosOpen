@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  User: Heather
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+    <f:loadBundle var="userLabels" basename="users.UserLabels"/>
+    <f:loadBundle var="securityQuestion" basename="users.SecurityQuestions"/>
+
+    <h2>#{userLabels.userActivation}</h2>
+
+	<h:messages id="activationMessagedId"/>
+
+    <h:form id="userActFormId" prependId="false" >
+
+	    <f:metadata>
+		    <f:viewParam name="activationCode" value="#{regUser.activationCode}" />
+	    </f:metadata>
+        <h:inputHidden value="#{regUser.activationCode}"/>
+
+        <p:panel id="mainPanel">
+
+            <p:focus context="mainPanel"/>
+
+            <p:panelGrid id="userRegPanelGridId" columnClasses="labelColumn, valueColumn" styleClass="noLines">
+
+                <p:row>
+                    <p:column>
+                        <h:outputLabel id="userNameLabelId" value="#{userLabels.userName}"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:inputText id="userNameInputId" value="#{regUser.userName}" required="true" maxlength="32"
+                                 requiredMessage="#{userLabels.errorLoginUserNameRequired}"/>
+                        <p:message id="userNameMsgId" for="userNameInputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <h:outputLabel id="passwordLabelId" value="#{userLabels.password}"/>
+                    </p:column>
+
+                    <p:column>
+
+                        <p:password id="passwordInputId" value="#{regUser.password}" feedback="true" required="true" maxlength="48"
+                                    requiredMessage="#{userLabels.errorPasswordRequired}"/>
+                        <p:message id="passwordMsgId" for="passwordInputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column><p:outputLabel id="question1LabelId" value="#{userLabels.firstSecurityQuestion}" /></p:column>
+                    <p:column>
+
+                        <p:selectOneMenu id="question1SelectOneId"
+                                         value="#{regUser.securityQuestion1}" effect="fade"
+                                         styleClass="secretQuestionSelectOne">
+                            <f:selectItems value="#{commonItems.getSecurityQuestions(regUser.securityQuestion2)}" var="questionItem"
+                                                   itemValue="#{questionItem}" itemLabel="#{securityQuestion[questionItem.label]}" />
+                            <p:ajax event="change" process="@this,question2SelectOneId"  update="question2SelectOneId"/>
+                        </p:selectOneMenu >
+
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column><p:outputLabel id="answser1LabelId" value="#{userLabels.yourAnswer}" /></p:column>
+                    <p:column>
+                        <p:password id="answer1InputId" value="#{regUser.securityAnswer1}" required="true" maxlength="48"
+                                     requiredMessage="#{userLabels.errorSecurityQuestionRequired}"
+                                     validatorMessage="#{userLabels.errorSecurityQuestionInvalid}">
+                            <f:validateLength minimum="4"/>
+                        </p:password>
+                        <p:message id="answer1MsgId" for="answer1InputId"/>
+
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column><p:outputLabel id="question2LabelId" value="#{userLabels.secondSecurityQuestion}" /></p:column>
+                    <p:column>
+
+                        <p:selectOneMenu id="question2SelectOneId" value="#{regUser.securityQuestion2}" effect="fade">
+                            <f:selectItems value="#{commonItems.getSecurityQuestions(regUser.securityQuestion1)}" var="questionItem"
+                                           itemValue="#{questionItem}" itemLabel="#{securityQuestion[questionItem.label]}" />
+                            <p:ajax event="change" process="@this,question1SelectOneId" update="question1SelectOneId"/>
+                        </p:selectOneMenu >
+
+                    </p:column>
+
+                </p:row>
+
+                <p:row>
+                    <p:column><p:outputLabel id="answser2LabelId" value="#{userLabels.yourAnswer}" /></p:column>
+                    <p:column>
+                        <p:password id="answer2InputId" value="#{regUser.securityAnswer2}" required="true" maxlength="48"
+                                     requiredMessage="#{userLabels.errorSecurityQuestionRequired}"
+                                     validatorMessage="#{userLabels.errorSecurityQuestionInvalid}">
+                            <f:validateLength minimum="4"/>
+                        </p:password>
+                        <p:message id="answer2MsgId" for="answer2InputId"/>
+
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:commandButton id="submitBtnId" value="#{userLabels.activate}" action="#{userRegistrationBean.activateUser}"
+                                styleClass="buttons" process="@form" update="@form"
+                                onclick="blockForm.show()"
+                                oncomplete="blockForm.hide()" />
+
+            <p:blockUI block="@form" widgetVar="blockForm"/>
+
+        </p:panel>
+    </h:form>
+</ui:define>
+</ui:composition>
+
+</html>

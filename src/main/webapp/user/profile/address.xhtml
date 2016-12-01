@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+		PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+	<f:loadBundle var="userLabels" basename="users.UserLabels"/>
+	<p:messages id="profileMessagedId"/>
+
+	<h:form id="addressFormId" prependId="false">
+
+        <p:panel id="labelValuePanel">
+
+            <h2>#{userLabels.addressEditor}, #{userListBean.currentWebUser.firstName} #{userListBean.currentWebUser.lastName}</h2>
+
+            <p:panelGrid id="addressEditPanelGridId" columnClasses="labelColumn, valueColumn" styleClass="noLines">
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="addressNickNameLabelId"
+                                       value="#{userLabels.addressLabel}"
+                                       for="addressNickNameInputId"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="addressNickNameInputId" value="#{userListBean.currentAddress.addressLabel}"
+                                     required="true" maxlength="32"
+                                     requiredMessage="#{userLabels.errorNickNameRequired}"
+                                     validatorMessage="#{userLabels.errorNickNameInvalid}">
+
+                            <f:validateRegex pattern="^[\p{L}\d\s,.-]*$"  />
+                            <p:ajax onevent="blur" update="addressNickNameMsgId"/>
+                        </p:inputText>
+                        <p:watermark id="addressLblWtrMkId" value="#{userLabels.addressLabelWaterMark}" for="addressNickNameInputId"/>
+                        <p:message id="addressNickNameMsgId" for="addressNickNameInputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="street1LabelId" value="#{userLabels.streetAddress}" for="street1InputId"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="street1InputId" value="#{userListBean.currentAddress.street1}" required="true" maxlength="60"
+                                     requiredMessage="#{userLabels.errorStreetRequired}" validatorMessage="#{userLabels.errorStreetInvalid}">
+                            <f:validateRegex pattern="^[\p{L}\d\s.#-_\+]*$"  />
+                            <p:ajax onevent="blur" update="street1MsgId"/>
+                        </p:inputText>
+                        <p:message id="street1MsgId" for="street1InputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="street2InputId" value="#{userListBean.currentAddress.street2}" maxlength="60"
+                                     validatorMessage="#{userLabels.errorStreetInvalid}">
+                            <f:validateRegex pattern="^[\p{L}\d\s.#-_\+]*$"  />
+                            <p:ajax onevent="blur" update="street2MsgId"/>
+                        </p:inputText>
+                        <p:message id="street2MsgId" for="street2InputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="cityLabelId" value="#{userLabels.city}" for="cityInputId"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="cityInputId" value="#{userListBean.currentAddress.city}" required="true" maxlength="48"
+                                     requiredMessage="#{userLabels.errorCityRequired}" validatorMessage="#{userLabels.errorCityInvalid}">
+                            <f:validateRegex pattern="^[\p{L}\d\s.-]*$"  />
+                            <p:ajax onevent="blur" update="cityMsgId"/>
+                        </p:inputText>
+                        <p:message id="cityMsgId" for="cityInputId"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="countryLabelId" value="#{userLabels.country}"/>
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id="countrySelectOneId" value="#{userListBean.currentAddress.country}" effect="fade" >
+                            <f:selectItems value="#{commonItems.countries}" var="countryItem"
+                                           itemValue="#{countryItem}" itemLabel="#{userLabels[countryItem.label]}" />
+                            <p:ajax event="change" update="stateProveinceSelectOneId,stateProvinceLabelId"/>
+                        </p:selectOneMenu >
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="stateProvinceLabelId" value="#{userLabels[userListBean.currentAddress.country.stateOrProvince]}" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu  id="stateProveinceSelectOneId" value="#{userListBean.currentAddress.state}" effect="fade">
+                            <f:selectItems value="#{commonItems.getStatesProvinces(userListBean.currentAddress.country)}" var="stateProvinceItem"
+                                           itemValue="#{stateProvinceItem}" itemLabel="#{userLabels[stateProvinceItem.label]}" />
+                        </p:selectOneMenu >
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel id="zipCodeLabelId" value="#{userLabels.zipCode}" for="zipInputId"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="zipInputId" value="#{userListBean.currentAddress.zipCode}" maxlength="10"
+                                      required="true" requiredMessage="#{userLabels.errorZipCodeRequired}"
+                                      validatorMessage="#{userLabels.errorZipCodeInvalid}">
+                            <f:validateRegex pattern="^[0-9]{5}$" />
+                            <p:ajax onevent="blur" update="zipCodeMsgId"/>
+                        </p:inputText>
+                        <p:message id="zipCodeMsgId" for="zipInputId"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:commandButton id="addressSubmitBtn" value="#{userLabels.submit}"
+                             action="#{userListBean.saveAddress}"
+                             process="@form" update="@form"
+                             styleClass="buttons"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+
+            <p:commandButton id="addressCancelBtn" value="#{userLabels.cancel}"
+                             action="#{userListBean.clearAddress}"
+                             immediate="true"
+                             styleClass="buttons"
+                             onclick="blockForm.show()"
+                             oncomplete="blockForm.hide()"/>
+
+            <p:blockUI block="@form" widgetVar="blockForm"/>
+
+        </p:panel>
+	</h:form>
+</ui:define>
+</ui:composition>
+</html>

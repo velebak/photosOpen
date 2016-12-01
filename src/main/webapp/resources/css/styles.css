@@ -1,0 +1,597 @@
+@charset "utf-8";
+
+* {
+	font-family: Futura, Calibri, sans-serif;
+}
+
+body {
+    background-image:url('/photoApp/resources/images/chipsbg.jpg');
+    background-color:#eff7fa;
+}
+
+h1 {
+    position: relative;
+    margin: 10px;
+    padding: 2px 15px 2px 0;
+    font-family: "Terminator Two", Futura, Calibri, sans-serif;
+	font-size: 4.5em;
+	color: #ffa07a;
+    background: inherit;
+}
+
+h2 {
+	font-size:1.875em;
+	color: #ffa07a;
+    margin: 6px;
+}
+
+h3, .subHeader {
+	font-size:1.625em;
+}
+
+p {font-size:1.25em;}
+
+img {
+    border: none;
+}
+
+.headerTable {
+    margin: 0 10%;
+    background: inherit;
+    border: none;
+}
+
+.ui-panelgrid.ui-widget.headerTable tbody,
+.ui-panelgrid.ui-widget.headerTable tr,
+.ui-panelgrid.ui-widget.headerTable td[role=gridcell] {
+    border: none;
+    background: inherit;
+    margin: 0;
+}
+
+#menuItemPanel {
+
+    /* http://www.colorzilla.com/gradient-editor/ */
+    background: rgb(242,242,242); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(242,242,242,1) 0%, rgba(204,204,204,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,242,242,1)), color-stop(100%,rgba(204,204,204,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(242,242,242,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(242,242,242,1) 0%,rgba(204,204,204,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(242,242,242,1) 0%,rgba(204,204,204,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(242,242,242,1) 0%,rgba(204,204,204,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+
+    max-width: 600px;
+    transition: all 0.7s ease;
+    -webkit-transition: all 0.7s ease;
+}
+
+a.menuItemLink {
+    height: 70px;
+    min-height: 70px;
+    max-height: 70px;
+    border-radius: 4px;
+    transition: all 0.7s ease;
+    -webkit-transition: all 0.7s ease;
+}
+
+a.menuItemLink img {
+    display:block;
+    margin: 5px auto;
+    width: 50px;
+    height: 50px;
+    border: none;
+    transition: all 0.7s ease;
+    -webkit-transition: all 0.7s ease;
+}
+
+a.menuItemLink:hover {
+    background: #c4c4c4;
+    display: block;
+}
+
+a.menuItemLink img:hover {
+    width: 60px;
+    height: 60px;
+}
+
+#headerPanel {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: inherit;
+    margin: 4px 8%;
+    border: none;
+    border-radius: 4px;
+}
+
+div#contentPanel {
+    background-color:#eff7fa;
+    position: relative;
+	z-index: 1;
+    min-width: 300px;
+	border-width:4px;
+	border-color: #ffa07a;
+	border-radius: 12px;
+    margin: 4px 8%;
+    transition: all 0.7s ease;
+    -webkit-transition: all 0.7s ease;
+}
+
+@media (max-width: 767px) {
+
+    a.menuItemLink {
+        height: 50px;
+        min-height: 50px;
+        max-height: 50px;
+    }
+
+    a.menuItemLink img:hover {
+        width: 50px;
+        height: 50px;
+    }
+
+    #headerPanel {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        background: inherit;
+        margin: 4px 8px;
+        border: none;
+        border-radius: 4px;
+    }
+
+}
+
+#confirmDlgId {
+    width: 30%;
+}
+
+#contentInnerHeaderPanel tbody, #contentInnerHeaderPanel tr, #contentInnerHeaderPanel td, #contentInnerHeaderPanel.ui-widget-content{
+    border: none;
+}
+
+#consulting {
+
+    font-size:2.175em;
+    color: #ffa07a;
+
+    animation: consultingAnim 5s ease-in-out;
+    /* Safari and Chrome: */
+    -webkit-animation: consultingAnim 5s ease-in-out;
+}
+
+#knownBadTable, #knownSafeTable {
+
+    width: 90%;
+    max-width: 600px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#auditLogTable {
+    width: 100%;
+}
+
+div#actionButtonsPanel {
+    background-color: inherit;
+    border: none;
+    margin-left:auto;
+    margin-right:auto;
+    width:98%
+    padding: 2px 4px;
+}
+
+div#mainPanel {
+    background-color: inherit;
+	width: 95%;
+	min-width: 380px;
+	margin-left:auto;
+	margin-right:auto;
+    border: none;
+    padding: 2px 4px;
+}
+
+#mainTablePanel, div#mainTablePanel, div#mainTablePanel.ui-panel.ui-widget.ui-widget-content.ui-corner-all {
+    background-color: inherit;
+    width: 95%;
+    min-width: 380px;
+    margin-left:auto;
+    margin-right:auto;
+    border: none;
+    padding: 2px 4px;
+}
+
+div#labelValuePanel {
+    background-color: inherit;
+    width: 80%;
+    min-width: 300px;
+    margin-left:auto;
+    margin-right:auto;
+    border: none;
+    padding: 2px 8px;
+}
+
+@media (max-width: 1000px) {
+
+    div#contentPanel {
+        margin: 4px 4px;
+    }
+
+    div#contentPanel div.ui-panel.ui-panel-content {
+        margin: 0;
+        padding: 0;
+    }
+
+    div#mainPanel {
+        width: 98%;
+        padding: 2px 2px;
+    }
+
+    div#mainPanel {
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    div#mainTablePanel, div#mainTablePanel.ui-panel.ui-widget.ui-widget-content.ui-corner-all {
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    div#labelValuePanel {
+        width: 98%;
+        padding: 2px 2px;
+    }
+
+    div#actionButtonsPanel {
+        width: 100%;
+        padding: 2px 2px;
+    }
+}
+
+@media (max-width: 490px) {
+
+    div#contentPanel {
+        margin: 4px 2px;
+    }
+
+    div#mainPanel {
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    div#labelValuePanel {
+        width: 100%;
+        padding: 2px 2px;
+    }
+
+    div#labelValuePanel table,
+    div#labelValuePanel thead,
+    div#labelValuePanel tbody,
+    div#labelValuePanel tfoot,
+    div#labelValuePanel th,
+    div#labelValuePanel td,
+    div#labelValuePanel tr {
+        display:block;
+    }
+
+    div#labelValuePanel tr + tr {
+        margin-top:1em;
+    }
+}
+
+div#footerPanel {
+    background-color: #dcecf3;
+    position: relative;
+    margin: 0 10%;
+}
+
+div#footer {
+    font-size: small;
+}
+
+table#contentInnerHeaderPanel {
+    border: none;
+}
+
+div.photoContainer {
+    width: 100%;
+    min-width: 100px;
+    border: none;
+}
+
+div.photoUpload {
+    width: 90%;
+    min-height: 100px;
+    min-width: 100px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+li.ui-ring-item {
+    width: 55px;
+    height: 55px;
+}
+
+li.ui-ring-item.ui-ring-item-focus {
+    width: 75px;
+    height: 75px;
+}
+
+li.ui-ring-item  img.uploadedPhotoImage {
+    width: 50px;
+    height: 50px;
+    margin-top: -5px;
+    margin-right: 5px;
+    margin-left: -5px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+li.ui-ring-item.ui-ring-item-focus img.uploadedPhotoImage {
+    width: 70px;
+    height: 70px;
+    margin-top: -5px;
+    margin-right: 5px;
+    margin-left: -5px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+
+@keyframes consultingAnim
+{
+	from {color: rgba(255, 160, 122, 0.24);}
+	to {color: #ffa07a;}
+}
+
+@-webkit-keyframes consultingAnim /* Safari and Chrome */
+{
+	from {color:  rgba(255, 160, 122, 0.24); }
+	to {color: #ffa07a;}
+}
+
+.skillToDisplay {
+	background-color: blueviolet;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: whitesmoke;
+	width: 60px;
+	height: 35px;
+	border-radius: 8px;
+	text-align: center;
+	text-shadow: 2px;
+	padding: 10px 5px 0 5px;
+	margin: 5px;
+}
+
+.skillToDisplay.longer120 {
+	width: 120px;
+}
+
+.rightAlign {
+	float: left;
+}
+
+.leftAlign {
+	float: right;
+}
+
+.labelColumn {
+	width: 35%;
+	text-align: right;
+	vertical-align: middle;
+}
+
+.valueColumn {
+	width: 65%;
+}
+
+.smallColumnWidth {
+    width: 90px;
+}
+
+.mediumColumnWidth {
+    width: 110px;
+}
+
+.largeColumnWidth {
+    width: 200px;
+}
+
+.imageColumn {
+    width: 80px;
+    padding: 0;
+    margin: 0;
+}
+
+.headerDateFilter {
+    float: right;
+    margin: 1px;
+}
+
+span.detailLabel {
+    float: right;
+    text-align: right;
+}
+
+.buttons, .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.buttons {
+	border-radius: 4px;
+    margin: 4px;
+    min-width: 90px;
+
+	/* http://www.colorzilla.com/gradient-editor/ */
+	background: rgb(235,241,246); /* Old browsers */
+	background: -moz-linear-gradient(-45deg,  rgba(235,241,246,1) 3%, rgba(171,211,238,1) 33%, rgba(213,235,251,1) 91%, rgba(137,195,235,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(3%,rgba(235,241,246,1)), color-stop(33%,rgba(171,211,238,1)), color-stop(91%,rgba(213,235,251,1)), color-stop(100%,rgba(137,195,235,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-45deg,  rgba(235,241,246,1) 3%,rgba(171,211,238,1) 33%,rgba(213,235,251,1) 91%,rgba(137,195,235,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-45deg,  rgba(235,241,246,1) 3%,rgba(171,211,238,1) 33%,rgba(213,235,251,1) 91%,rgba(137,195,235,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-45deg,  rgba(235,241,246,1) 3%,rgba(171,211,238,1) 33%,rgba(213,235,251,1) 91%,rgba(137,195,235,1) 100%); /* IE10+ */
+	background: linear-gradient(135deg,  rgba(235,241,246,1) 3%,rgba(171,211,238,1) 33%,rgba(213,235,251,1) 91%,rgba(137,195,235,1) 100%); /* W3C */
+}
+
+.links, .ui-commandlink.ui-widget.links {
+	color: cornflowerblue;
+	margin: 5px;
+}
+
+.deletedLabel {
+	color: lightgray;
+	text-decoration:line-through;
+}
+
+.faintHorizontalSeparator {
+	height: 1px;
+	width: 80%;
+	margin-left:auto;
+	margin-right:auto;
+	border-color: #ffa07a;
+}
+
+.ui-panel.ui-widget.ui-widget-content.ui-corner-all.hiddenPanel, .hiddenPanel {
+    background-color: inherit;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ui-widget-content {
+    background: #eff7fa;
+}
+
+tr[role].ui-widget-content, td[role].ui-panelgrid-cell.labelColumn, td[role].ui-panelgrid-cell.valueColumn {
+    border: none;
+    padding: 4px 0;
+}
+
+.addressLabel {
+	color: #ffa07a;
+}
+
+.addressPanel, .addressPanel tr, .addressPanel td, .ui-datagrid-content.ui-widget-content  {
+	border: none !important;
+	padding: 0;
+	margin: 2px 0 10px 0;
+}
+
+div.ui-panel.ui-widget.ui-widget-content.ui-corner-all.noLines,
+table.ui-panelgrid.ui-widget.noLines, table.ui-panelgrid.ui-widget.noLines tr, table.ui-panelgrid.ui-widget.noLines td {
+    border: none
+}
+
+td[role=gridcell].ui-panelgrid-cell {
+    border: 1px inset;
+}
+
+input[role=textbox].ui-inputfield.ui-widget.ui-state-default.ui-corner-all.hasDatepicker {
+    width: 90px;
+    max-width: 90px;
+}
+
+.hiddenInput {
+	display:none;
+}
+
+.secretQuestionSelectOne {
+    width: 100px;
+}
+
+.errorSummaryText {
+	color: red;
+}
+
+.bookstyle {
+    padding: 2px;
+}
+
+.divider {
+    width: 3px;
+}
+
+@media (max-width: 991px) {
+
+    div#photoDataTableId table th:nth-child(5),
+    div#photoDataTableId table td:nth-child(5),
+    div#userTable table th:nth-child(4),
+    div#userTable table td:nth-child(4),
+    div#auditLogTable table th:nth-child(6),
+    div#auditLogTable table td:nth-child(6)
+
+    {
+        display: none;
+    }
+}
+
+@media (max-width: 850px) {
+
+    div#photoDataTableId table th:nth-child(4),
+    div#photoDataTableId table td:nth-child(4),
+    div#photoDataTableId table th:nth-child(5),
+    div#photoDataTableId table td:nth-child(5),
+    div#userTable table th:nth-child(4),
+    div#userTable table td:nth-child(4),
+    div#userTable table th:nth-child(3),
+    div#userTable table td:nth-child(3),
+    div#auditLogTable table th:nth-child(6),
+    div#auditLogTable table td:nth-child(6),
+    div#auditLogTable table th:nth-child(5),
+    div#auditLogTable table td:nth-child(5)
+    {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+
+    div#photoDataTableId table th:nth-child(3),
+    div#photoDataTableId table td:nth-child(3),
+    div#photoDataTableId table th:nth-child(4),
+    div#photoDataTableId table td:nth-child(4),
+    div#photoDataTableId table th:nth-child(5),
+    div#photoDataTableId table td:nth-child(5),
+    div#userTable table th:nth-child(4),
+    div#userTable table td:nth-child(4),
+    div#userTable table th:nth-child(3),
+    div#userTable table td:nth-child(3),
+    div#userTable table th:nth-child(2),
+    div#userTable table td:nth-child(2),
+    div#auditLogTable table th:nth-child(6),
+    div#auditLogTable table td:nth-child(6),
+    div#auditLogTable table th:nth-child(5),
+    div#auditLogTable table td:nth-child(5),
+    div#auditLogTable table th:nth-child(4),
+    div#auditLogTable table td:nth-child(4)
+    {
+        display: none;
+    }
+}
+
+@media (max-width: 490px) {
+
+    div#photoDataTableId table th:nth-child(3),
+    div#photoDataTableId table td:nth-child(3),
+    div#photoDataTableId table th:nth-child(4),
+    div#photoDataTableId table td:nth-child(4),
+    div#photoDataTableId table th:nth-child(5),
+    div#photoDataTableId table td:nth-child(5),
+    div#photoDataTableId table th:nth-child(6),
+    div#photoDataTableId table td:nth-child(6),
+    div#userTable table th:nth-child(4),
+    div#userTable table td:nth-child(4),
+    div#userTable table th:nth-child(3),
+    div#userTable table td:nth-child(3),
+    div#userTable table th:nth-child(2),
+    div#userTable table td:nth-child(2),
+    div#userTable table th:nth-child(5),
+    div#userTable table td:nth-child(5),
+    div#auditLogTable table th:nth-child(6),
+    div#auditLogTable table td:nth-child(6),
+    div#auditLogTable table th:nth-child(5),
+    div#auditLogTable table td:nth-child(5),
+    div#auditLogTable table th:nth-child(4),
+    div#auditLogTable table td:nth-child(4),
+    div#auditLogTable table th:nth-child(3),
+    div#auditLogTable table td:nth-child(3)
+    {
+        display: none;
+    }
+}
+

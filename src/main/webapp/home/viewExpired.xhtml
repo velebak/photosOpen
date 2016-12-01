@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author: Heather
+  Date: 6/23/14
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+	<f:loadBundle var="generalLabels" basename="main.GeneralLabels"/>
+
+	<h2>#{generalLabels.sessionExpired}</h2>
+
+    <h:form prependId="false">
+
+        <p:panel styleClass="hiddenPanel">
+            <p:outputLabel id="expiredMsgId" value="#{generalLabels.expiredMessage}"/>
+        </p:panel>
+
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>

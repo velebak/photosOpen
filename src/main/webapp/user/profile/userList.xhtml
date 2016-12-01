@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="content">
+
+	    <f:loadBundle var="userLabels" basename="users.UserLabels"/>
+	    <f:loadBundle var="userType" basename="users.UserType"/>
+	    <f:loadBundle var="userStatus" basename="users.UserStatus"/>
+
+        <h:form id="userListFormId" prependId="false">
+
+            <p:panel id="mainTablePanel" rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}">
+
+                <p:panelGrid id="contentInnerHeaderPanel" columns="2">
+                    <h2>#{userLabels.userList}</h2>
+                    <p:panel id="actionButtonsPanel">
+                        <p:commandButton id="newUserBtnId" value="#{userLabels.newUser}"
+                                         action="#{userListBean.newUser}" ajax="false"
+                                         styleClass="buttons"/>
+                    </p:panel>
+                </p:panelGrid>
+
+                <p:dataTable id="userTable" var="webUser" value="#{webUserList}"
+                             selectionMode="single" selection="#{userListBean.currentWebUser}"
+                             sortBy="#{webUser.userName}" sortOrder="ASCENDING"
+                             paginator="true" rows="15" paginatorPosition="bottom"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,15,50" lazy="true">
+
+                    <p:ajax event="rowSelect" listener="#{userListBean.loadUserFromList}"/>
+
+                    <p:column headerText="#{userLabels.userName}" sortBy="#{webUser.userName}" filterBy="#{webUser.userName}" filterMaxLength="20">
+                        <h:outputText value="#{webUser.userName}" />
+                    </p:column>
+
+                    <p:column headerText="#{userLabels.firstName}" sortBy="#{webUser.firstName}" filterBy="#{webUser.firstName}" filterMaxLength="20">
+                        <h:outputText value="#{webUser.firstName}" />
+                    </p:column>
+
+                    <p:column headerText="#{userLabels.lastName}" sortBy="#{webUser.lastName}" filterBy="#{webUser.lastName}" filterMaxLength="20">
+                        <h:outputText value="#{webUser.lastName}" />
+                    </p:column>
+
+                    <p:column headerText="#{userLabels.userType}" sortBy="#{webUser.userType}">
+                        <h:outputText value="#{userType[webUser.userType.label]}" />
+                    </p:column>
+
+                    <p:column headerText="#{userLabels.userStatus}" sortBy="#{webUser.userStatus}">
+                        <h:outputText value="#{userStatus[webUser.userStatus.label]}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

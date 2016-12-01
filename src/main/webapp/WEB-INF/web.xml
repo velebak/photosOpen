@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>facelets.DEVELOPMENT</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+	<context-param>
+		<param-name>PARAMETER_ENCODING</param-name>
+		<param-value>UTF-8</param-value>
+	</context-param>
+
+    <!-- JSF mapping -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>16000000</max-file-size>
+            <max-request-size>16000000</max-request-size>
+            <file-size-threshold>16000000</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <!-- Map these files with JSF -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>
+            org.primefaces.webapp.filter.FileUploadFilter
+        </filter-class>
+        <init-param>
+            <param-name>thresholdSize</param-name>
+            <param-value>41943040</param-value>
+        </init-param>
+        <init-param>
+            <param-name>uploadDirectory</param-name>
+            <param-value>/Users/photos/temp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+   <filter>
+       <filter-name>SecurityFilter</filter-name>
+       <filter-class>com.tf.photos.util.SecurityFilter</filter-class>
+   </filter>
+   <!-- Set the login filter to secure all the pages in the /secured/* path of the application  -->
+   <filter-mapping>
+       <filter-name>SecurityFilter</filter-name>
+       <url-pattern>/user/*</url-pattern>
+   </filter-mapping>
+
+    <filter>
+        <filter-name>BlockedFilter</filter-name>
+        <filter-class>com.tf.photos.util.BlockedFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BlockedFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.omnifaces.filter.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <mime-mapping>
+        <extension>xhtml</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jsf</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+
+   <welcome-file-list>
+       <welcome-file>/home/overview.jsf</welcome-file>
+       <welcome-file>/index.html</welcome-file>
+   </welcome-file-list>
+
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/errors/sessionExpired.html</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+	    <location>/errors/500.html</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/errors/500.html</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/404.html</location>
+    </error-page>
+
+    <session-config>
+        <session-timeout>90</session-timeout>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
+</web-app>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  @author Heather Stevens
+  Date: 6/23/2014
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/layout.xhtml">
+<ui:define name="content">
+
+    <f:loadBundle var="userLabels" basename="users.UserLabels"/>
+
+	<h:messages id="loginMessagedId" errorClass="errorSummaryText" />
+
+    <h:form id="userLoginFormId" prependId="false">
+
+        <p:panel id="labelValuePanel">
+
+            <p:focus context="labelValuePanel"/>
+
+            <h2>#{userLabels.userLogin}</h2>
+
+            <p:panelGrid id="userRegPanelGridId" columns="2" columnClasses="labelColumn, valueColumn" styleClass="hiddenPanel">
+
+                <p:outputLabel id="userNameLabelId" for="userNameInputId" value="#{userLabels.userName}"/>
+
+                <p:panel id="userNamePnlId" styleClass="hiddenPanel">
+                    <p:inputText id="userNameInputId" value="#{regUser.userName}" required="true" maxlength="32"
+                             requiredMessage="#{userLabels.errorLoginUserNameRequired}">
+                    </p:inputText>
+                    <p:message id="userNameMsgId" for="userNameInputId"/>
+
+                </p:panel>
+
+                <p:outputLabel id="passwordLabelId" for="passwordInputId" value="#{userLabels.password}"/>
+
+                <p:panel id="passwordPanelId" styleClass="hiddenPanel">
+                    <p:password id="passwordInputId" value="#{regUser.password}" required="true" maxlength="48"
+                                requiredMessage="#{userLabels.errorPasswordRequired}">
+                    </p:password>
+                    <p:message id="passwordMsgId" for="passwordInputId"/>
+                </p:panel>
+
+                <p:commandButton id="submitBtnId" value="#{userLabels.login}"
+                                 action="#{userRegistrationBean.loginUser}"
+                                 ajax="false"
+                                 styleClass="buttons"/>
+
+                <p:blockUI block="@form" widgetVar="blockForm"/>
+
+            </p:panelGrid>
+        </p:panel>
+    </h:form>
+</ui:define>
+</ui:composition>
+</html>

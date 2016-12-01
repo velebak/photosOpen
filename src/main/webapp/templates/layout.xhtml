@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+    <h:head>
+        <ui:insert name="header">
+            <ui:include src="header.xhtml" />
+        </ui:insert>
+    </h:head>
+
+    <h:body>
+	    <h:outputStylesheet library="css" name="styles.css" />
+	    <f:loadBundle var="generalLabels" basename="main.GeneralLabels"/>
+
+   	    <h:form id="menuFormId" prependId="false">
+
+            <p:panel id="headerPanel" styleClass="ui-grid ui-grid-responsive">
+
+                <div class="ui-grid-row">
+
+                    <div class="ui-grid-col-5">
+                        <h1>#{generalLabels.companyName}</h1>
+                    </div>
+
+                    <div class="ui-grid-col-7">
+
+                        <p:panel id="menuItemPanel" styleClass="ui-grid ui-grid-responsive">
+
+                            <div class="ui-grid-row">
+
+                                <p:commandLink title="#{generalLabels.overview}" action="/home/overview.jsf" ajax="false" styleClass="ui-grid-col-2 menuItemLink">
+                                    <p:graphicImage id="homeImgId" url="/resources/images/icons/Home.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.photos}" action="#{photoListBean.initializePhotoList}" ajax="false" styleClass="ui-grid-col-2 menuItemLink">
+                                    <p:graphicImage id="photoImgId" url="/resources/images/icons/Camera.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.register}" action="/users/newUser.jsf" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{not webUserSession.loggedIn}">
+                                    <p:graphicImage id="regImgId" url="/resources/images/icons/User.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.login}" action="/users/userLogin.jsf" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{not webUserSession.loggedIn}">
+                                    <p:graphicImage id="loginImgId" url="/resources/images/icons/Key.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.auditLog}"  action="#{auditLogListBean.reloadList}" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}">
+                                    <p:graphicImage id="auditImgId" url="/resources/images/icons/Security.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.users}" action="/user/profile/userList.jsf" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{webUserSession.loggedIn and webUserSession.webUser.userType eq 'ADMIN'}">
+                                    <p:graphicImage id="userListImgId" url="/resources/images/icons/Windows_Tools.png" />
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.profile}" action="#{userListBean.loadUserProfile}" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{webUserSession.loggedIn}">
+                                    <p:graphicImage id="profileImgId" url="/resources/images/icons/User.png"/>
+                                </p:commandLink>
+
+                                <p:commandLink title="#{generalLabels.logout}" action="#{userRegistrationBean.logoutUser}" ajax="false" styleClass="ui-grid-col-2 menuItemLink"
+                                            rendered="#{webUserSession.loggedIn}">
+                                    <p:graphicImage id="logoutImgId" url="/resources/images/icons/Logout.png"/>
+                                </p:commandLink>
+                            </div>
+                        </p:panel>
+                    </div>
+                </div>
+            </p:panel>
+
+        </h:form>
+
+	    <p:panel id="contentPanel">
+			<ui:insert name="content" />
+
+            <hr/>
+            <ui:insert name="footer">
+                <ui:include src="footer.xhtml" />
+            </ui:insert>
+	    </p:panel>
+
+        <p:dialog id="exceptionDialog" header="#{generalLabels.sessionExpired}" widgetVar="expiredDialogNonSecured"
+                  height="500px">
+
+             <h:outputText value="#{generalLabels.expiredMessageNonSecured}" /> <br />
+
+            <p:button onclick="document.location.href = document.location.href;"
+                      value="#{generalLabels.reload}" />
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>
